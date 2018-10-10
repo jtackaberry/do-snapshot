@@ -133,7 +133,7 @@ do-snapshot.py operates on all droplets with a particular tag of your choosing (
 
 ## Dependencies
 
-do-snapshot.py is tested on Python 3 but works with Python 2.  The only external dependency is the [requests library](http://docs.python-requests.org/en/master/).  On Ubuntu or Debian, this can be installed with:
+do-snapshot.py is tested on Python 3 but works with Python 2.  The only batteries-not-included dependency is the [requests library](http://docs.python-requests.org/en/master/).  On Ubuntu or Debian, this can be installed with:
 
 ```bash
 sudo apt install python3-requests
