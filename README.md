@@ -7,10 +7,11 @@ do-snapshot.py is a simple Python script to snapshot [DigitalOcean droplets](htt
 Before we get into it, here's an example:
 
 ```bash
-python3 do-snapshot.py -s 1d -r lon1 -k 3d:1d -k 1w:1w -k 1m:2m -k 0d:6m
+python3 do-snapshot.py --token ~/.dotoken -s 1d -r lon1 -k 3d:1d -k 1w:1w -k 1m:2m -k 0d:6m
 ```
 
 This will:
+* read the API token from ~/.dotoken
 * take a snapshot of all droplets tagged `autosnapshot` (the default tag) once a day
 * Transfer *any* snapshots taken by the tool to the `lon1` region (if they're not already there)
 * Define this retention policy
@@ -31,7 +32,9 @@ Due to DO API limitations:
 ## DigitalOcean API Token
 First, fetch a [personal access token](https://www.digitalocean.com/docs/api/create-personal-access-token/).
 
-You can pass this token to do-snapshot.py on the command line, but if you do that, the token (which is equivalent to a password) is visible in `ps` output.  So it's recommended instead to pass a filename containing the token as the argument, or export it with the `DO_TOKEN` environment variable.
+You can pass this token to do-snapshot.py directly on the command line, but if you do that, the token (which is equivalent to a password) is visible in `ps` output.  So it's recommended instead to pass a filename containing the token as the argument.
+
+Or you can export it with the `DO_TOKEN` environment variable.
 
 On proper operating systems:
 
@@ -44,9 +47,6 @@ Or on Windows:
 ```cmd
 set DO_TOKEN=<your token here>
 ```
-
-do-snapshot.py operates on all droplets with a particular tag of your choosing (e.g. `prod` or `autosnapshot`), so if you haven't already, you'll want to apply a suitable tag to the droplet(s) you wish to snapshot.
-
 
 ## Retention Policies
 
@@ -123,6 +123,11 @@ optional arguments:
                         --dryrun)
   -v, --verbose         Increase verbosity
 ```
+
+
+do-snapshot.py operates on all droplets with a particular tag of your choosing (e.g. `prod` or `autosnapshot`), so if you haven't already, you'll want to apply a suitable tag to the droplet(s) you wish to snapshot.
+
+
 
 ## Dependencies
 
