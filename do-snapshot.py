@@ -207,7 +207,7 @@ def main():
     if not args.token:
         return log.fatal('must pass API token via --token or DO_TOKEN environment variable')
     elif len(args.token) not in (32, 64) or not all(c in string.hexdigits for c in args.token):
-        log.warning('token looks invalid (unexpected size of non-hex characters)')
+        log.warning('token looks invalid (unexpected size or non-hex characters)')
 
     args.prefix = args.prefix.replace('$tag', args.tag)
     min_age = parse_interval(args.snapshot)
