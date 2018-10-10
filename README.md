@@ -28,6 +28,8 @@ Due to DO API limitations:
 1. In-progress snapshots aren't visible, so if you run the tool in quick succession, it can trigger another snapshot even though one is pending.  **Workaround**: don't run it more frequently than once an hour or so.
 2. Only completed snapshots can be transferred to other regions, so if one invocation takes a snapshot, the transfer step will happen in the next invocation.  **Workaround**: run the tool more frequently than you want to snapshot.  (e.g. if you pass `-s 1d`, you can run it once every 4 hours or so.  Just mind gotcha #1.)
 
+Other limitations I can't blame on DigitalOcean:
+* Only online snapshots are supported presently
 
 ## DigitalOcean API Token
 First, fetch a [personal access token](https://www.digitalocean.com/docs/api/create-personal-access-token/).
