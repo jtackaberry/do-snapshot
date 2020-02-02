@@ -5,6 +5,8 @@
 """
 do-snapshot.py - snapshot droplets on DigitalOcean
 """
+__version__ = '1.1.0'
+
 import sys
 import os
 import stat
@@ -173,6 +175,7 @@ def main():
                    help='log to syslog instead of stderr')
     p.add_argument('-v', '--verbose', dest='verbose', action='store_true',
                    help='Increase verbosity')
+    p.add_argument('--version', action='version', version='%(prog)s ' + __version__)
     args = p.parse_args()
 
     if args.syslog:
