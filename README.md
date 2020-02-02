@@ -10,6 +10,12 @@ Before we get into it, here's an example:
 python3 do-snapshot.py --token ~/.dotoken -s 1d -r lon1 -k 3d:1d -k 1w:1w -k 1m:2m -k 0d:6m
 ```
 
+or use the Docker image:
+
+```bash
+docker run -e DO_TOKEN=$(cat ~/.dotoken) jtackaberry/do-snapshot:latest -s 1d -r lon1 -k 3d:1d -k 1w:1w -k 1m:2m -k 0d:6m
+```
+
 This will:
 * read the API token from ~/.dotoken
 * take a snapshot of all droplets tagged `autosnapshot` (the default tag) once a day
@@ -146,4 +152,65 @@ Or on other distributions or platforms, assuming pip is installed:
 
 ```bash
 pip install requests
+```
+
+# Kubernetes
+
+The example manifests below demonstrate how you can schedule snapshots via a Kubernetes CronJob:
+
+```yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: digitalocean
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: do-api-token
+  namespace: digitalocean
+type: Opaque
+data:
+  # Base64 encoded Digital Ocean API token:
+  # set +o history
+  # echo -n 'apitokengoeshere' | base64 -w0
+  # set -o history
+  token: U29ycnksIG5vIEFQSSB0b2tlbiBzdHVwaWRseSBjb21taXR0ZWQgdG8gZ2l0IGZvdW5kIGhlcmUuIDopCg==
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: snapshot-droplets
+  namespace: digitalocean
+spec:
+  schedule: "23 */2 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          # If you don't already have a PodSecurityPolicy constraining uid/gid, you should
+          # uncomment this.
+          # securityContext:
+          #   runAsUser: 10500
+          #   runAsGroup: 10500
+          containers:
+          - name: do-snapshot
+            image: jtackaberry/do-snapshot:latest
+            env:
+              - name: DO_TOKEN
+                valueFrom:
+                  secretKeyRef:
+                    name: do-api-token
+                    key: token
+            args:
+              - -s 1d
+              - -r lon1
+              - -k 3d:1d
+              - -k 2w:5d
+              - -k 0d:3w
+              - -v
+          restartPolicy: Never
 ```
