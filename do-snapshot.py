@@ -223,7 +223,10 @@ def main():
                 raise ValueError('keep argument must be in the form INTERVAL:AGE')
             interval, age = parse_interval(interval), parse_interval(age)
             policies.append((interval, age))
-            log.info('keeping only 1 snapshot every %s for snapshots older than %s', interval, age)
+            if interval:
+                log.info('keeping only 1 snapshot every %s for snapshots older than %s', interval, age)
+            else:
+                log.info('keeping no snapshots older than %s', age)
             if age < min_age:
                 log.warning('retention policy %s uses lower age than snapshot age (%s)', keep, args.snapshot)
         # Sort policies by age (oldest first)
