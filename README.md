@@ -13,7 +13,7 @@ python3 do-snapshot.py --token ~/.dotoken -s 1d -r lon1 -k 3d:1d -k 1w:1w -k 1m:
 or use the Docker image:
 
 ```bash
-docker run -e DO_TOKEN=$(cat ~/.dotoken) jtackaberry/do-snapshot:latest -s 1d -r lon1 -k 3d:1d -k 1w:1w -k 1m:2m -k 0d:6m
+docker run -e DO_TOKEN=$(cat ~/.dotoken) jtackaberry/do-snapshot -s 1d -r lon1 -k 3d:1d -k 1w:1w -k 1m:2m -k 0d:6m
 ```
 
 This will:
