@@ -97,14 +97,16 @@ We're taking 1 snapshot per day (`-s 1d`) and our youngest policy doesn't apply 
 
 ```
 usage: do-snapshot.py [-h] [-t TAG] [-p PREFIX] [-r REGION] -s AGE
-                      [-k INTERVAL:AGE] [--dryrun] [--token TOKEN] [-v]
-                      [--simulate INTERVAL:COUNT]
+                      [-k INTERVAL:AGE] [--dryrun] [--token TOKEN]
+                      [--simulate INTERVAL:DURATION] [--syslog] [-v]
 
 optional arguments:
   -h, --help            show this help message and exit
-  -t TAG, --tag TAG     snapshots droplets with the given tag (default: prod)
+  -t TAG, --tag TAG     snapshots droplets with the given tag (default:
+                        autosnapshot)
   -p PREFIX, --prefix PREFIX
-                        prefix for snapshot names (default: $tag-autosnapshot-
+                        prefix for snapshot names (default: $droplet-
+                        autosnapshot-
   -r REGION, --region REGION
                         transfer snapshots to this additional region (supports
                         multiple -r)
@@ -119,10 +121,11 @@ optional arguments:
                         snapshots
   --token TOKEN         API token or path to file containing the token (also
                         possible to pass via DO_TOKEN env var)
-  --simulate INTERVAL:COUNT
-                        Test a retention policy (multiple -k) by simulating
-                        COUNT runs of the tool every INTERVAL. (Implies
+  --simulate INTERVAL:DURATION
+                        Test a retention policy (multiple -k) by runs of the
+                        toolevery INTERVAL for DURATION time. (Implies
                         --dryrun)
+  --syslog              log to syslog instead of stderr
   -v, --verbose         Increase verbosity
 ```
 
