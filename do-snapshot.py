@@ -209,9 +209,11 @@ def main():
     elif len(args.token) not in (32, 64) or not all(c in string.hexdigits for c in args.token):
         log.warning('token looks invalid (unexpected size or non-hex characters)')
 
-    args.prefix = args.prefix.replace('$tag', args.tag)
+    args.prefix = args.prefix.replace('$tag', args.tag).strip()
     min_age = parse_interval(args.snapshot)
     log.info('will snapshot if latest is older than %s', min_age)
+    args.region = [r.strip() for r in args.region]
+    args.tag = args.tag.strip()
 
     policies = []
     if args.keep:
