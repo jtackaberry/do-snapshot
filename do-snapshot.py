@@ -5,7 +5,7 @@
 """
 do-snapshot.py - snapshot droplets on DigitalOcean
 """
-__version__ = '1.1.0'
+__version__ = '1.1.1'
 
 import sys
 import os
@@ -209,8 +209,11 @@ def main():
 
     if not args.token:
         return log.fatal('must pass API token via --token or DO_TOKEN environment variable')
-    elif len(args.token) not in (32, 64) or not all(c in string.hexdigits for c in args.token):
-        log.warning('token looks invalid (unexpected size or non-hex characters)')
+    elif not args.token.startswith('dop_'):
+        if len(args.token) in (32, 64) and all(c in string.hexdigits for c in args.token):
+            log.warning('using legacy token -- recommend regenerating a personal access token')
+        else:
+            log.warning('token looks invalid')
 
     args.prefix = args.prefix.replace('$tag', args.tag).strip()
     min_age = parse_interval(args.snapshot)
