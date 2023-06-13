@@ -170,12 +170,9 @@ metadata:
   name: do-api-token
   namespace: digitalocean
 type: Opaque
-data:
-  # Base64 encoded Digital Ocean API token:
-  # set +o history
-  # echo -n 'apitokengoeshere' | base64 -w0
-  # set -o history
-  token: U29ycnksIG5vIEFQSSB0b2tlbiBzdHVwaWRseSBjb21taXR0ZWQgdG8gZ2l0IGZvdW5kIGhlcmUuIDopCg==
+stringData:
+  # Your personal access token goes here.
+  token: dop_v1_bunchofhexdigits...
 ---
 apiVersion: batch/v1beta1
 kind: CronJob
@@ -191,11 +188,10 @@ spec:
     spec:
       template:
         spec:
-          # If you don't already have a PodSecurityPolicy constraining uid/gid, you should
-          # uncomment this.
-          # securityContext:
-          #   runAsUser: 10500
-          #   runAsGroup: 10500
+          # Actual uid/gid doesn't matter, just pick something non-root
+          securityContext:
+            runAsUser: 10500
+            runAsGroup: 10500
           containers:
           - name: do-snapshot
             image: jtackaberry/do-snapshot:latest
